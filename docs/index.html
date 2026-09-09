@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ITI Computer Vision — Mohamed Alaa</title>
+  <style>
+:root{--ink:#1a1410;--paper:#f3ead8;--card:#fff8ec;--rule:#d4c6ae;--muted:#6d6254;--copper:#c47a32;--deep:#8d4f16}
+*{box-sizing:border-box}body{margin:0;font-family:Georgia,serif;background:#f3ead8;color:#1a1410;line-height:1.55}
+.wrap{width:min(920px,calc(100% - 1.5rem));margin:0 auto;padding:1.4rem 0 3rem}
+a{color:#8d4f16}header{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;border-bottom:1px solid #d4c6ae;padding-bottom:.8rem}
+.kicker{font:12px/1.4 ui-monospace,monospace;letter-spacing:.14em;text-transform:uppercase;color:#8d4f16}
+h1{font-size:clamp(1.8rem,5vw,2.6rem);line-height:1.1;margin:.3rem 0 1rem}
+.card{background:#fff8ec;border:1px solid #d4c6ae;padding:1rem 1.1rem;margin:1rem 0}
+.btn{display:inline-block;background:#1a1410;color:#f3ead8;text-decoration:none;padding:.55rem .9rem;border-radius:999px;margin:.2rem .3rem 0 0}
+.btn.ghost{background:transparent;color:#1a1410;border:1px solid #d4c6ae}
+canvas,textarea,pre{width:100%;background:#fffaf1;border:1px solid #d4c6ae}
+button{min-height:40px;padding:.4rem .7rem;margin:.2rem .25rem 0 0;cursor:pointer}
+@media(max-width:640px){h1{font-size:1.7rem}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <div class="kicker">Mohamed Alaa</div>
+      <strong>ITI Computer Vision</strong>
+    </div>
+    <nav>
+      <a href="https://github.com/MohamedAlaa3">GitHub</a>
+      · <a href="https://github.com/MohamedAlaa3/mohamed-alaa">Personal site</a>
+    </nav>
+  </header>
+  
+    <p class="kicker">Python · OpenCV</p>
+    <h1>Labs, then a clock and a snake</h1>
+    <p>Internship notebooks. Play a small snake here — same idea as Project 2.</p>
+    <p><a class="btn" href="https://github.com/MohamedAlaa3/ITI-ComuterVision-Internship">Notebooks</a></p>
+    <div class="card">
+      <canvas id="c" width="280" height="280"></canvas>
+      <p>Arrows or WASD. Collect the squares.</p>
+    </div>
+    
+</div>
+<script>
+const c=document.getElementById('c'),x=c.getContext('2d');
+const S=20;let snake=[{x:6,y:6}],dir={x:1,y:0},food={x:10,y:8},dead=false;
+function rnd(){return {x:Math.floor(Math.random()*14),y:Math.floor(Math.random()*14)}}
+addEventListener('keydown',e=>{
+  const k=e.key;
+  if(k==='ArrowUp'||k==='w')dir={x:0,y:-1};
+  if(k==='ArrowDown'||k==='s')dir={x:0,y:1};
+  if(k==='ArrowLeft'||k==='a')dir={x:-1,y:0};
+  if(k==='ArrowRight'||k==='d')dir={x:1,y:0};
+});
+setInterval(()=>{
+  if(dead)return;
+  const h={x:snake[0].x+dir.x,y:snake[0].y+dir.y};
+  if(h.x<0||h.y<0||h.x>13||h.y>13||snake.some(p=>p.x===h.x&&p.y===h.y)){dead=true;setTimeout(()=>{snake=[{x:6,y:6}];dir={x:1,y:0};food=rnd();dead=false;},800);return;}
+  snake.unshift(h);
+  if(h.x===food.x&&h.y===food.y)food=rnd(); else snake.pop();
+  x.fillStyle='#fff8ec';x.fillRect(0,0,280,280);
+  x.fillStyle='#c47a32';x.fillRect(food.x*S,food.y*S,S-1,S-1);
+  x.fillStyle='#1a1410';snake.forEach(p=>x.fillRect(p.x*S,p.y*S,S-1,S-1));
+},140);
+</script>
+</body>
+</html>
